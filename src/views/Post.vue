@@ -7,6 +7,13 @@
 </template>
 <script setup>
 
+//importamos los composables de vue router
+//para poder obtener el id del post desde la url
+
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
 //importamos nuestro composable y la funcion
 //para obtener un solo post
 
@@ -17,7 +24,9 @@ const { post, fetchOne } = usePost();
 //llamamos la funcion hardcodeando el id del post
 //para el ejemplo
 
-fetchOne(1);
+//obtenemos el id desde la url
+//de esta forma
+fetchOne(route.params.id);
 
 
 const user = {
