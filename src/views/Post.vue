@@ -17,19 +17,31 @@ const route = useRoute();
 //importamos nuestro composable y la funcion
 //para obtener un solo post
 
-import usePost from "../composables/usePost";
+// import usePost from "../composables/usePost";
 
-const { post, fetchOne } = usePost();
+// import useUser from "../composables/useUser";
+
+//cambiamos nuestras importaciones
+//para usar useResource en lugar de usePost o useUser
+//le especificamos como parametro el recurso que queremos obtener
+//de este modo solo importamos un solo composable
+//y lo reutilizamos para distintos recursos
+import useResource from "../composables/useResource";
+
+// const { post, fetchOne } = usePost();
+//renombramos las importaciones para mayor claridad
+//y evitar name clashes
+const { item: post, fetchOne: fetchPost } = useResource("posts");
 
 //llamamos la funcion hardcodeando el id del post
 //para el ejemplo
 
 //obtenemos el id desde la url
 //de esta forma
-fetchOne(route.params.id);
+fetchPost(route.params.id);
 
+// const { user, fetchOne: fetchUser } = useUser();
+const { item: user, fetchOne: fetchUser } = useResource("users");
 
-const user = {
-  name: "Leanne Graham",
-};
+fetchUser(1);
 </script>
