@@ -5,7 +5,12 @@
 		<div>{{ post.body }}</div>
 	</div>
 </template>
-<script setup>
+<!-- usamos este sintantic sugar para poder usar
+await directamente en el script setup
+pero para esto necesitamos usar suspense, que es una api
+aun experimental en vue pero es la unica forma de hacerlo de este modo
+-->
+<script setup async>
 //importamos los composables de vue router
 //para poder obtener el id del post desde la url
 
@@ -34,7 +39,9 @@ import { watch } from 'vue';
 const { item: post, fetchOne: fetchPost } = useResource('posts');
 
 // (async () => {
-fetchPost(route.params.id);
+// usamos nuestro await como normalmente
+//si no envolvemos en suspense esto fallará
+await fetchPost(route.params.id);
 // fetchUser(post.value.userId);
 // })();
 
@@ -54,12 +61,16 @@ const { item: user, fetchOne: fetchUser } = useResource('users');
 // asociada a ese post, de este modo podemos agregar llamadas
 //asincronas encadenadas en un script setup
 
-watch(()=>({...post.value}), (newPost) => {
-  console.log('Post changed:', newPost);
+//ya no necesitamos watch porqeu tenemos el await que detendrá
+//la ejecucion hasta tener el post
+fetchUser(post.value.userId);
+
+// watch(()=>({...post.value}), (newPost) => {
+//   console.log('Post changed:', newPost);
   
-    fetchUser(newPost.userId);
+//     fetchUser(newPost.userId);
   
-});
+// });
 
 //esto de aqui es una forma de encadenar las peticiones
 //en un script setup, ya que no podemos usar await
